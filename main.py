@@ -17,7 +17,7 @@ def root():
 @app.get("/books/{book_id}")
 def get_book_by_id(book_id: int) -> Book:
     if book_id < 0:
-        raise HTTPException(status_code=400, detail="Invalid book ID.")
+        raise HTTPException(status_code=404, detail="Invalid book ID.")
 
     for book in books:
         if book.id == book_id:
@@ -44,7 +44,7 @@ def search_books(title: str = None, author: str = None, limit: int = 5) -> dict:
     search_results = search_results[:limit]
 
     if not search_results:
-        raise HTTPException(status_code=400, detail="No books found.")
+        raise HTTPException(status_code=404, detail="No books found.")
 
     return {"results": search_results, "count": len(search_results)}
 
@@ -66,7 +66,7 @@ def filter_book_by_category(category_name: str, sort: str = None) -> dict:
         filtered_book.sort(key=lambda b: b.title.lower(), reverse=reverse)
 
     if not filtered_book:
-        raise HTTPException(status_code=400, detail="No books found.")
+        raise HTTPException(status_code=404, detail="No books found.")
 
     return {"result": filtered_book, "count": len(filtered_book)}
 
